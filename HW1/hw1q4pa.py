@@ -1,0 +1,1 @@
+# Question 4a: Let the drunk's starting position be x = 3. What are the possible positions that he could be in after one step, and what the probabilities of each? How about after two steps?

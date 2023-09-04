@@ -10,17 +10,18 @@
 # their movement. Show the plot for d = 25 for the best angle, and print the time. Also, write the
 # equations governing the movement of raptors.
 
+from copy import deepcopy
 from math import cos, degrees, dist, radians, sin, sqrt
 from math import atan2
 from time import sleep
-from utils import PRINT_DEBUG
+from utils import PRINT_DEBUG, create_plot
 import numpy as np
 import matplotlib.pyplot as plt
 
 D = 25
-DT = 0.03
+DT = 0.1
 DEBUG = False
-DEATH_DISTANCE = 15 * DT
+DEATH_DISTANCE = 0.5
 
 DEFAULT_OBJECT_PROPERTIES = {
 	"position": [0,0],
@@ -49,6 +50,10 @@ def is_dead(player, raptors):
 def main():
 	final_time = -1
 	final_angle = -1
+	player_positions = []
+	r0_positions = []
+	r1_positions = []
+	r2_positions = []
 	for init_angle in range(0, 359):
 		r0 = {
 			"position": [D,0],
@@ -77,25 +82,40 @@ def main():
 		}
 
 		time = 0
+		write_player_positions = []
+		write_raptor_positions = []
 		while(True):
-			if DEBUG:
-				PRINT_DEBUG(raptors, player)
-    
+			write_player_positions.append(deepcopy(player["position"]))
 			player = increment_object(player)
+
+			temp_raptor_positions = []
 			for raptor in raptors:
+				temp_raptor_positions.append(deepcopy(raptor["position"]))
 				raptor["angle"] = calc_angle(raptor["position"], player["position"])
-				raptor = increment_object(raptor)			
+				raptor = increment_object(raptor)
+			write_raptor_positions.append(temp_raptor_positions)
 			
 			if is_dead(player, raptors):
-				print("Dead at {t} seconds and {a} angle".format(t=time, a=init_angle))
 				if DEBUG:
+					print("Dead at {t} seconds and {a} angle".format(t=time, a=init_angle))
 					sleep(DT)
+
 				if(time > final_time):
 					final_time = round(time, 3)
 					final_angle = init_angle
+					r0_positions = []
+					r1_positions = []
+					r2_positions = []
+					for x in write_raptor_positions:
+						r0_positions.append(x[0])
+						r1_positions.append(x[1])
+						r2_positions.append(x[2])
+					player_positions = write_player_positions
 				break
 			else:
 				time += DT
+
+	create_plot(player_positions, r0_positions, r1_positions, r2_positions, 'Homework 1, Question 1\nFinal Time: ' + str(round(final_time, 3)) + ' Seconds; Final Angle: ' + str(final_angle) + ' Degrees')
 	print("Best Time: {t}, Best Angle: {a}".format(t=final_time, a=final_angle))
 
 if __name__ == "__main__":
