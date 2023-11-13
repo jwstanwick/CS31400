@@ -16,7 +16,7 @@ import numpy as np
 D = 25
 DT = 0.1
 DEBUG = False
-DEATH_DISTANCE = 0.5
+DEATH_DISTANCE = 15 * DT
 
 def find_best_player_angle(old_player, old_raptors):
 	final_time = -1

@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 D = 25
 DT = 0.1
 DEBUG = False
-DEATH_DISTANCE = 0.5
+DEATH_DISTANCE = 15 * DT
 
 DEFAULT_OBJECT_PROPERTIES = {
 	"position": [0,0],
