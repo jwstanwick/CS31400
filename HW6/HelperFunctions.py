@@ -25,10 +25,19 @@ def calcPolynomialVal(x, polynomial):
 
 # Find the maximum interpolation error for f(x) - p(x)
 def maxInterpolationError(x_arr, y_arr, p_arr):
-	max_error = 0
-	for i in range(len(x_arr)):
-		error = abs(y_arr[i] - calcPolynomialVal(x_arr[i], p_arr))
-		if error > max_error:
-			max_error = error
+	degree = len(x_arr) - 1   
+	max_error = -1
+	max_derivative_val = 1
+ 
+	for cur_x in x_arr:
+		product_term = 1
+		for x in x_arr:
+			if cur_x == x:
+				continue
+			else:
+				product_term = product_term * (cur_x - x)
+		error = max_derivative_val / factorial(degree + 1) * product_term
+		if abs(error) > max_error:
+			max_error = abs(error)
 	return max_error
         
